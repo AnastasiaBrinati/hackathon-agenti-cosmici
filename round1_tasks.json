@@ -1,0 +1,59 @@
+[
+  {
+    "task_id": "1",
+    "agent_response": "Droid R2-D2 already at Coruscant.",
+    "intermediate_steps": [
+      "Located R2-D2 at Coruscant."
+    ],
+    "final_state": {
+      "droid": "R2-D2",
+      "location": "Coruscant",
+      "status": "no_action_needed"
+    }
+  },
+  {
+    "task_id": "2",
+    "agent_response": "Item 'Walkman degli Antichi' purchased successfully on Coruscant.",
+    "intermediate_steps": [
+      "Found item 'Walkman degli Antichi' on Coruscant (id: WA001).",
+      "Droid 'R2-D2' is on Coruscant.",
+      "Purchased item: {'item': {'name': 'Walkman degli Antichi', 'price': 200, 'planet': 'Coruscant'}, 'price': 200, 'remaining_balance': 500}"
+    ],
+    "final_state": {
+      "droid": "R2-D2",
+      "location": "Coruscant",
+      "item_purchased": "Walkman degli Antichi",
+      "status": "purchased"
+    }
+  },
+  {
+    "task_id": "3",
+    "agent_response": "Information retrieved successfully for 'Cybersystems Inc.'.",
+    "intermediate_steps": [
+      "Retrieved info for 'Cybersystems Inc.'."
+    ],
+    "final_state": {
+      "company": "Cybersystems Inc.",
+      "status": "info_retrieved",
+      "info": {
+        "affiliation": "legitimate",
+        "planet": "Coruscant"
+      }
+    }
+  },
+  {
+    "task_id": "4",
+    "agent_response": "Could not purchase at least two items within the budget or due to errors.",
+    "intermediate_steps": [
+      "Droid moved to destination.",
+      "Found 0 items within budget.",
+      "Attempted purchases: 0."
+    ],
+    "final_state": {
+      "status": "purchase_failed",
+      "purchases": [],
+      "errors": [],
+      "remaining_budget": 100
+    }
+  }
+]
