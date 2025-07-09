@@ -2,10 +2,35 @@
 
 import json
 
+class GalacticState:
+    """Classe singleton per gestire lo stato condiviso della galassia"""
+    _instance = None
+    _state = None
+    
+    def __new__(cls, galaxy_state_file=None):
+        if cls._instance is None:
+            cls._instance = super(GalacticState, cls).__new__(cls)
+            if galaxy_state_file:
+                with open(galaxy_state_file, "r") as f:
+                    cls._state = json.load(f)
+        return cls._instance
+    
+    @property
+    def state(self):
+        return self._state
+    
+    def save_to_file(self, filepath):
+        """Salva lo stato corrente su file"""
+        with open(filepath, "w") as f:
+            json.dump(self._state, f, indent=2)
+
 class GalacticMarketplace:
-    def __init__(self, galaxy_state_file):
-        with open(galaxy_state_file, "r") as f:
-            self.galaxy_state = json.load(f)
+    def __init__(self, galaxy_state_file=None):
+        if galaxy_state_file:
+            self.galactic_state = GalacticState(galaxy_state_file)
+        else:
+            self.galactic_state = GalacticState()
+        self.galaxy_state = self.galactic_state.state
 
     def find_item(self, item_name):
         results = []
@@ -63,9 +88,12 @@ class GalacticMarketplace:
 
 
 class GalaxyNavigator:
-    def __init__(self, galaxy_state_file):
-        with open(galaxy_state_file, "r") as f:
-            self.galaxy_state = json.load(f)
+    def __init__(self, galaxy_state_file=None):
+        if galaxy_state_file:
+            self.galactic_state = GalacticState(galaxy_state_file)
+        else:
+            self.galactic_state = GalacticState()
+        self.galaxy_state = self.galactic_state.state
 
     def find_asset_position(self, droid_name):
         droid = self.galaxy_state["droids"].get(droid_name)
@@ -104,6 +132,12 @@ class GalaxyNavigator:
 
         if total_cost > self.galaxy_state["client"]["balance"]:
             raise ValueError("Fondi insufficienti per il viaggio.")
+        
+        print(f"Selected ship: {selected_ship_name}")
+        print(f"Selected ship location: {selected_ship['location']}")
+        print(f"Destination: {destination}")
+        print(f"Total cost: {total_cost}")
+        print(f"Client balance: {self.galaxy_state['client']['balance']}")
 
         # Marca la nave come non disponibile
         #selected_ship["available"] = False
@@ -124,12 +158,18 @@ class GalaxyNavigator:
 
     def get_fleet_status(self):
         return self.galaxy_state["ships"]
+    
+    def get_client_budget(self):
+        return self.galaxy_state["client"]["balance"]
 
 
 class InfoSphere:
-    def __init__(self, galaxy_state_file):
-        with open(galaxy_state_file, "r") as f:
-            self.galaxy_state = json.load(f)
+    def __init__(self, galaxy_state_file=None):
+        if galaxy_state_file:
+            self.galactic_state = GalacticState(galaxy_state_file)
+        else:
+            self.galactic_state = GalacticState()
+        self.galaxy_state = self.galactic_state.state
 
 
     def get_travel_cost(self, origin, destination):
@@ -184,6 +224,3 @@ class InfoSphere:
             if item_name.lower() in item["name"].lower():
                 results.append({"id": item_id, **item})
         return results
-
-    def get_client_budget(self):
-        return self.galaxy_state["client"]["balance"]
