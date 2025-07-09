@@ -132,12 +132,6 @@ class GalaxyNavigator:
 
         if total_cost > self.galaxy_state["client"]["balance"]:
             raise ValueError("Fondi insufficienti per il viaggio.")
-        
-        print(f"Selected ship: {selected_ship_name}")
-        print(f"Selected ship location: {selected_ship['location']}")
-        print(f"Destination: {destination}")
-        print(f"Total cost: {total_cost}")
-        print(f"Client balance: {self.galaxy_state['client']['balance']}")
 
         # Marca la nave come non disponibile
         #selected_ship["available"] = False
