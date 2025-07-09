@@ -36,13 +36,7 @@ class JSONMissionEvaluator:
         if pattern is None:
             # Pattern predefiniti più comuni
             patterns = [
-                "mission_*.json",
-                "missione_*.json", 
-                "task_*.json",
-                "round*_mission_*.json",
-                "round*_task_*.json",
-                "*_mission_*.json",
-                "*_task_*.json"
+                "round*_tasks.json"
             ]
         else:
             patterns = [pattern]

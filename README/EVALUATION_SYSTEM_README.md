@@ -68,9 +68,10 @@ Valuta la qualità dell'implementazione:
 ## 🎮 Utilizzo - Modalità Notebook
 
 ### Setup Base
+
 ```python
 from evaluation_system import HackathonEvaluator, display_evaluation_results
-from galactic_apis import initialize_apis
+from galactic_apis_gpt import initialize_apis
 
 # Inizializza per un round specifico
 evaluator = HackathonEvaluator(round_number=2)
