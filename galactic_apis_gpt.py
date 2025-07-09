@@ -21,6 +21,13 @@ class GalacticMarketplace:
                 results.append({"id": item_id, **item})
         return results
 
+    def item_on_planet(self, item_name, planet):
+        for item_id, item in self.galaxy_state.get("marketplace", {}).items():
+            if planet.lower() in item["planet"].lower() and item_name.lower() == item["name"].lower():
+                return True
+        return False
+
+
     def purchase_item(self, item_id):
         item = self.galaxy_state["marketplace"].get(item_id)
         if not item:
@@ -123,6 +130,41 @@ class InfoSphere:
     def __init__(self, galaxy_state_file):
         with open(galaxy_state_file, "r") as f:
             self.galaxy_state = json.load(f)
+
+
+    def get_travel_cost(self, origin, destination):
+        route = f"{origin}-{destination}"
+        return self.galaxy_state["travel_costs"].get(route, 0)
+
+    def get_all_planets(self):
+        planets = set()
+
+        # Droids locations
+        for droid in self.galaxy_state.get("droids", {}).values():
+            if "location" in droid:
+                planets.add(droid["location"])
+
+        # Ships locations
+        for ship in self.galaxy_state.get("ships", {}).values():
+            if "location" in ship:
+                planets.add(ship["location"])
+
+        # Marketplace planets
+        for item in self.galaxy_state.get("marketplace", {}).values():
+            if "planet" in item:
+                planets.add(item["planet"])
+
+        # Infosphere planets
+        for info in self.galaxy_state.get("infosphere", {}).values():
+            if "planet" in info:
+                planets.add(info["planet"])
+            # A few entries might have the planet as the key itself (e.g., "Alderaan")
+            # and only 'status'/'threat_level' inside; if so, also add the key
+        for key, info in self.galaxy_state.get("infosphere", {}).items():
+            if isinstance(info, dict) and "planet" not in info and "status" in info:
+                planets.add(key)
+
+        return sorted(planets)
 
     def search_info(self, subject):
         info = self.galaxy_state["infosphere"].get(subject)
